@@ -1,0 +1,92 @@
+<style>
+  svg#clouds {
+    position: fixed;
+    bottom: -160px;
+    left: -230px;
+    z-index: -10;
+    width: 1920px;
+    cursor: none;
+  }
+
+  .no-tooltips {
+    pointer-events: none;
+  }
+</style>
+
+<div class="container">
+    <div *ngIf="alertMessage" class="alert alert-{{alertType}} alert-dismissible fade show" role="alert">
+      {{alertMessage}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="closeAlert()"></button>
+    </div>
+    <h2>Student List</h2>
+    <button class="btn btn-primary mb-3" (click)="showModal()">+</button>
+    <button class="btn btn-info mb-3 ms-3 text-white" (click)="callApi()">Call API</button>
+    <div *ngIf="students.length > 0">
+      <table class="table table-responsive-md table-bordered">
+        <thead>
+          <tr>
+            <th width="10%">ID</th>
+            <th width="20%">Name</th>
+            <th width="20%">Age</th>
+            <th width="20%">Sex</th>
+            <th width="30%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students; index as i">
+            <td>{{ student.id }}</td>
+            <td>{{ student.name }}</td>
+            <td>{{ student.age }}</td>
+            <td>{{ student.sex === 1 ? 'Male' : 'Female' }}</td>
+            <td>
+              <button class="btn btn-warning text-white" (click)="showModal(student)">Update</button>
+              <button class="btn btn-danger ms-3" (click)="deleteRow(i)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="students.length <= 0">
+      <h4>There is no student data.</h4>
+    </div>
+
+    <ng-template #studentModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title">{{ studentModalTitle }}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close('Close click')"></button>
+      </div>
+      <div class="modal-body">
+        <form #studentForm="ngForm" (ngSubmit)="onSubmit(studentForm)">
+          <div class="mb-3" *ngIf="student.id">
+            <label for="id" class="form-label">ID:</label>
+            <input type="text" class="form-control" id="id" [(ngModel)]="student.id" name="id" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" [(ngModel)]="student.name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="age" class="form-label">Age:</label>
+            <input type="number" class="form-control" id="age" [(ngModel)]="student.age" name="age" required>
+          </div>
+          <div class="mb-3">
+            <label for="sex" class="form-label">Sex:</label>
+            <select class="form-select" id="sex" [(ngModel)]="student.sex" name="sex" required>
+              <option [ngValue]="1">Male</option>
+              <option [ngValue]="2">Female</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+    
+    <svg id="clouds" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677" class="no-tooltips">
+      <title>Gray Clouds Background</title>
+      <path id="Path_39" data-name="Path 39" d="M2379.709,863.793c10-93-77-171-168-149-52-114-225-105-264,15-75,3-140,59-152,133-30,2.83-66.725,9.829-93.5,26.25-26.771-16.421-63.5-23.42-93.5-26.25-12-74-77-130-152-133-39-120-212-129-264-15-54.084-13.075-106.753,9.173-138.488,48.9-31.734-39.726-84.4-61.974-138.487-48.9-52-114-225-105-264,15a162.027,162.027,0,0,0-103.147,43.044c-30.633-45.365-87.1-72.091-145.206-58.044-52-114-225-105-264,15-75,3-140,59-152,133-53,5-127,23-130,83-2,42,35,72,70,86,49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33,61.112,8.015,113.854-5.72,150.492-29.764a165.62,165.62,0,0,0,110.861-3.236c47,94,178,113,251,33,31.385,4.116,60.563,2.495,86.487-3.311,25.924,5.806,55.1,7.427,86.488,3.311,73,80,204,61,251-33a165.625,165.625,0,0,0,120,0c51,13,108,15,157-5a147.188,147.188,0,0,0,33.5-18.694,147.217,147.217,0,0,0,33.5,18.694c49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z" transform="translate(142.69 -634.312)" fill="#eee"/>
+    </svg>
+  </div>
+  
