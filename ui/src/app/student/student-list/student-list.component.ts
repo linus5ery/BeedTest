@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CallApiService } from 'src/app/call-api.service';
 
 @Component({
   selector: 'app-student-list',
@@ -22,7 +23,8 @@ export class StudentListComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private callApiService: CallApiService,
   ) { }
 
   ngOnInit(): void {
@@ -104,7 +106,14 @@ export class StudentListComponent implements OnInit {
   callApi(): void {
     // Call the API from the Node.js project.
     if(this.studentDataModified) {
-      this.replaceStudents();
+      // this.replaceStudents();
+      this.callApiService.replaceStudents(this.students)
+      .then(() => {
+        this.showAlert('Success to replace student data with the service.', 'success');
+      })
+      .catch(() => {
+        this.showAlert('Failed to replace student data with the service.', 'danger');
+      });
       this.studentDataModified = false;
     } else {
       this.fetchStudents();
